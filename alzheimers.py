@@ -14,15 +14,38 @@ scaler = joblib.load("scaler.pkl")
 # Streamlit Page Settings
 # -------------------------------
 st.set_page_config(page_title="Alzheimer's Prediction", layout="wide")
-st.title("🧠 Alzheimer’s Disease Prediction System")
+
+# ----------- HEADER SECTION ----------
+col1, col2 = st.columns([2,1])
+
+with col1:
+    st.title("🧠 Alzheimer’s Disease Prediction System")
+    st.write(
+        """
+        <p style='font-family: Times New Roman; font-size:18px; font-weight:bold;'>
+        Alzheimer's disease is a progressive brain disorder that slowly destroys memory and thinking skills.<br>
+        It affects daily functioning and worsens over time, especially in older adults.
+        </p>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col2:
+    st.image(
+        "https://img.freepik.com/free-vector/informative-poster-alzheimers-disease_1308-131207.jpg?semt=ais_hybrid",
+        caption="Alzheimer's Awareness",
+        width=300
+    )
+
 st.write("Fill the patient details in the sidebar to predict Alzheimer's risk.")
 
 # -------------------------------
 # Sidebar Input Sections
 # -------------------------------
 st.sidebar.header("Patient Input Form")
+
 with st.sidebar.expander("Patient Identity"):
-    PatientID = st.number_input("Patient ID", min_value=1, max_value=99999, value=4751)
+    PatientID = st.number_input("Patient ID", min_value=1, max_value=100, value=1)  # updated
 
 with st.sidebar.expander("Basic Info"):
     Age = st.number_input("Age", 50, 100, 70)
@@ -71,8 +94,8 @@ with st.sidebar.expander("Cognitive & Functional"):
 # -------------------------------
 Gender = 1 if Gender == "Female" else 0
 
-input_data = np.array([[PatientID,Age, Gender, Ethnicity, EducationLevel, BMI, Smoking, Alcohol,
-                        PhysicalActivity, DietQuality, SleepQuality, FamilyHistory,
+input_data = np.array([[PatientID, Age, Gender, Ethnicity, EducationLevel, BMI, Smoking,
+                        Alcohol, PhysicalActivity, DietQuality, SleepQuality, FamilyHistory,
                         CardiovascularDisease, Diabetes, Depression, HeadInjury,
                         Hypertension, SystolicBP, DiastolicBP, CholTotal, CholLDL,
                         CholHDL, CholTrig, MMSE, Functional, MemoryComplaints,
@@ -94,7 +117,7 @@ st.subheader("Prediction Results")
 
 if st.button("Predict Alzheimer’s Risk"):
     prediction = model.predict(input_data_scaled)[0]
-    probability = model.predict_proba(input_data_scaled)[0][1]  # risk probability
+    probability = model.predict_proba(input_data_scaled)[0][1]  
 
     if prediction == 1:
         st.error(f"⚠ **High Risk of Alzheimer's Disease**")
@@ -103,10 +126,10 @@ if st.button("Predict Alzheimer’s Risk"):
 
     st.write(f"**Risk Probability:** {probability*100:.2f}%")
 
-    # Visual Pie Chart
+    # Smaller Pie Chart
     fig = px.pie(values=[probability, 1-probability], 
-                 names=["Risk", "No Risk"], 
-                 color_discrete_sequence=["red", "green"])
+                 names=["Risk", "No Risk"],
+                 width=350, height=350)   # Reduced size
     st.plotly_chart(fig)
 
     st.info("This prediction is based on your trained ML model.")
@@ -115,6 +138,3 @@ if st.button("Predict Alzheimer’s Risk"):
 # Footer
 # -------------------------------
 st.caption("Developed as part of the Alzheimer's Disease ML Classification Project.")
-
-
-
