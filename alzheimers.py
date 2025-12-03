@@ -21,6 +21,8 @@ st.write("Fill the patient details in the sidebar to predict Alzheimer's risk.")
 # Sidebar Input Sections
 # -------------------------------
 st.sidebar.header("Patient Input Form")
+with st.sidebar.expander("Patient Identity"):
+    PatientID = st.number_input("Patient ID", min_value=1, max_value=99999, value=4751)
 
 with st.sidebar.expander("Basic Info"):
     Age = st.number_input("Age", 50, 100, 70)
@@ -113,4 +115,5 @@ if st.button("Predict Alzheimer’s Risk"):
 # Footer
 # -------------------------------
 st.caption("Developed as part of the Alzheimer's Disease ML Classification Project.")
+
 
