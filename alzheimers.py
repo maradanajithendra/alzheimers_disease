@@ -71,7 +71,7 @@ with st.sidebar.expander("Cognitive & Functional"):
 # -------------------------------
 Gender = 1 if Gender == "Female" else 0
 
-input_data = np.array([[Age, Gender, Ethnicity, EducationLevel, BMI, Smoking, Alcohol,
+input_data = np.array([[PatientID,Age, Gender, Ethnicity, EducationLevel, BMI, Smoking, Alcohol,
                         PhysicalActivity, DietQuality, SleepQuality, FamilyHistory,
                         CardiovascularDisease, Diabetes, Depression, HeadInjury,
                         Hypertension, SystolicBP, DiastolicBP, CholTotal, CholLDL,
@@ -115,5 +115,6 @@ if st.button("Predict Alzheimer’s Risk"):
 # Footer
 # -------------------------------
 st.caption("Developed as part of the Alzheimer's Disease ML Classification Project.")
+
 
 
