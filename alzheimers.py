@@ -8,6 +8,8 @@ import plotly.express as px
 # -------------------------------
 log_model = joblib.load("logistic_model.pkl")
 dt_model = joblib.load("decision_tree_model.pkl")
+rf_model = joblib.load("random_forest.pkl")
+gb_model = joblib.load("gradient boosting.pkl")
 scaler = joblib.load("scaler.pkl")
 
 # -------------------------------
@@ -138,3 +140,4 @@ if st.button("Predict Alzheimer’s Risk"):
 # Footer
 # -------------------------------
 st.caption("Developed as part of the Alzheimer's Disease ML Classification Project.")
+
