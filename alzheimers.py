@@ -141,3 +141,4 @@ if st.button("Predict Alzheimer’s Risk"):
 # -------------------------------
 st.caption("Developed as part of the Alzheimer's Disease ML Classification Project.")
 
+
