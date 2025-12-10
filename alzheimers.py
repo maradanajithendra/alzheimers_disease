@@ -9,7 +9,7 @@ import plotly.express as px
 log_model = joblib.load("logistic_model.pkl")
 dt_model = joblib.load("decision_tree_model.pkl")
 rf_model = joblib.load("random_forest.pkl")
-gb_model = joblib.load("gradient boosting.pkl")
+gb_model = joblib.load("gradient_boosting.pkl")  # updated filename
 scaler = joblib.load("scaler.pkl")
 
 # -------------------------------
@@ -26,7 +26,7 @@ with col1:
         """
         <p style='font-family: Times New Roman; font-size:18px; font-weight:bold;'>
         Alzheimer's disease is a progressive brain disorder that slowly destroys memory and thinking skills.<br>
-        It affects daily functioning and worsens over time, especially in older adults.
+        Early prediction helps in better management and control of symptoms.
         </p>
         """,
         unsafe_allow_html=True
@@ -35,7 +35,6 @@ with col1:
 with col2:
     st.image(
         "https://img.freepik.com/free-vector/informative-poster-alzheimers-disease_1308-131207.jpg?semt=ais_hybrid",
-        caption="Alzheimer's Awareness",
         width=300
     )
 
@@ -47,7 +46,7 @@ st.write("Fill the patient details in the sidebar to predict Alzheimer's risk.")
 st.sidebar.header("Patient Input Form")
 
 with st.sidebar.expander("Patient Identity"):
-    PatientID = st.number_input("Patient ID", min_value=1, max_value=100, value=1)  # updated
+    PatientID = st.number_input("Patient ID", min_value=1, max_value=100, value=1)
 
 with st.sidebar.expander("Basic Info"):
     Age = st.number_input("Age", 50, 100, 70)
@@ -109,8 +108,19 @@ input_data_scaled = scaler.transform(input_data)
 # -------------------------------
 # Model Selection
 # -------------------------------
-model_choice = st.sidebar.selectbox("Choose Model", ["Logistic Regression", "Decision Tree"])
-model = log_model if model_choice == "Logistic Regression" else dt_model
+model_choice = st.sidebar.selectbox(
+    "Choose Prediction Model",
+    ["Logistic Regression", "Decision Tree", "Random Forest", "Gradient Boosting"]
+)
+
+if model_choice == "Logistic Regression":
+    model = log_model
+elif model_choice == "Decision Tree":
+    model = dt_model
+elif model_choice == "Random Forest":
+    model = rf_model
+else:
+    model = gb_model
 
 # -------------------------------
 # Prediction
@@ -119,26 +129,22 @@ st.subheader("Prediction Results")
 
 if st.button("Predict Alzheimer’s Risk"):
     prediction = model.predict(input_data_scaled)[0]
-    probability = model.predict_proba(input_data_scaled)[0][1]  
+    probability = model.predict_proba(input_data_scaled)[0][1]
 
     if prediction == 1:
-        st.error(f"⚠ **High Risk of Alzheimer's Disease**")
+        st.error("⚠ High Risk of Alzheimer's Disease")
     else:
-        st.success(f"✔ **Low Risk of Alzheimer's Disease**")
+        st.success("✔ Low Risk of Alzheimer's Disease")
 
     st.write(f"**Risk Probability:** {probability*100:.2f}%")
 
-    # Smaller Pie Chart
-    fig = px.pie(values=[probability, 1-probability], 
-                 names=["Risk", "No Risk"],
-                 width=350, height=350)   # Reduced size
+    fig = px.pie(values=[probability, 1-probability], names=["Risk", "No Risk"], width=350, height=350)
     st.plotly_chart(fig)
 
     st.info("This prediction is based on your trained ML model.")
 
-# -------------------------------
-# Footer
-# -------------------------------
 st.caption("Developed as part of the Alzheimer's Disease ML Classification Project.")
+
+
 
 
